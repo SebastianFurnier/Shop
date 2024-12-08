@@ -6,7 +6,6 @@ import com.project.shop.Service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.List;
 
 @Service
@@ -47,7 +46,7 @@ public class ProductService implements IProductService {
 
     @Override
     public Product getDisabledProduct(Long id) {
-        return productRepository.searchProductByActiveFalseAndId(id);
+        return productRepository.searchProductByIdAndActiveFalse(id);
     }
 
     @Override

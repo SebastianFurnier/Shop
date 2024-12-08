@@ -1,5 +1,6 @@
 package com.project.shop.Model;
 
+import com.project.shop.Enum.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,7 +21,7 @@ public class Sell {
     private Long id;
     private Date sellDate;
     private float finalPrice;
-    private String status;
+    private Status status;
     @ManyToOne
     @JoinColumn(name = "userd_id")
     private User user;
