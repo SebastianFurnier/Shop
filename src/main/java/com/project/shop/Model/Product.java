@@ -22,7 +22,7 @@ public class Product {
     private String description;
     private float price;
     private int discount;
-    private boolean isActive;
+    private boolean active;
     @ElementCollection
     private  List<Integer> categories;
     private int stock;

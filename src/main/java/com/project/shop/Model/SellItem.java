@@ -1,12 +1,10 @@
 package com.project.shop.Model;
 
-import com.project.shop.Service.IProductService;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Entity
 @NoArgsConstructor
