@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService implements IProductService {
@@ -28,49 +29,61 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public void disableProduct(Long id) {
-        Product product =
-                productRepository.searchProductByActiveTrueAndId(id);
-        product.setActive(false);
+    public void disableProduct(Long id) throws Exception {
+        Optional<Product> product =
+                productRepository.getProductByActiveAndId(true, id);
+
+        if (product.isEmpty())
+            throw new Exception();
+
+        Product myProduct = product.get();
+        myProduct.setActive(false);
+
+        productRepository.save(myProduct);
     }
 
     @Override
     public Product getActiveProduct(Long id) {
-        return productRepository.searchProductByActiveTrueAndId(id);
+        Optional<Product> myProduct =
+                productRepository.getProductByActiveAndId(true, id);
+
+        return myProduct.orElse(null);
     }
 
     @Override
     public List<Product> getActiveProducts() {
-        return productRepository.searchProductsByActiveTrue();
+        return productRepository.getProductsByActive(true);
     }
 
     @Override
     public Product getDisabledProduct(Long id) {
-        return productRepository.searchProductByIdAndActiveFalse(id);
+        Optional<Product> myProduct = productRepository.getProductByActiveAndId(false, id);
+
+        return myProduct.orElse(null);
     }
 
     @Override
     public List<Product> getAllDisabledProducts() {
-        return productRepository.searchProductsByActiveFalse();
+        return productRepository.getProductsByActive(false);
     }
 
     @Override
     public List<Product> getActiveProductsByHigherPrice() {
-        return productRepository.searchProductByActiveTrueOrderByPriceDesc();
+        return productRepository.getProductsByActiveOrderByPriceDesc(true);
     }
 
     @Override
     public List<Product> getActiveProductsByLowerPrice() {
-        return productRepository.searchProductByActiveTrueOrderByPriceDesc();
+        return productRepository.getProductsByActiveOrderByPriceDesc(true);
     }
 
     @Override
     public List<Product> getActiveProductsByAlphabeticAZOrder() {
-        return productRepository.searchProductByActiveTrueOrderByNameAsc();
+        return productRepository.getProductsByActiveOrderByNameAsc(true);
     }
 
     @Override
     public List<Product> getActiveProductsByAlphabeticZAOrder() {
-        return productRepository.searchProductByActiveTrueOrderByNameDesc();
+        return productRepository.getProductsByActiveOrderByNameDesc(true);
     }
 }
