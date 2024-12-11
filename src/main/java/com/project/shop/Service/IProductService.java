@@ -7,7 +7,7 @@ import java.util.List;
 public interface IProductService {
     Product createProduct(Product product);
     Product editProduct(Product product);
-    void disableProduct(Long id) throws Exception;
+    void disableProduct(Long id);
     Product getActiveProduct(Long id);
     List<Product> getActiveProducts();
     Product getDisabledProduct(Long id);

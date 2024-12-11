@@ -29,12 +29,9 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public void disableProduct(Long id) throws Exception {
+    public void disableProduct(Long id) {
         Optional<Product> product =
                 productRepository.getProductByActiveAndId(true, id);
-
-        if (product.isEmpty())
-            throw new Exception();
 
         Product myProduct = product.get();
         myProduct.setActive(false);
@@ -74,7 +71,7 @@ public class ProductService implements IProductService {
 
     @Override
     public List<Product> getActiveProductsByLowerPrice() {
-        return productRepository.getProductsByActiveOrderByPriceDesc(true);
+        return productRepository.getProductsByActiveOrderByPriceAsc(true);
     }
 
     @Override
