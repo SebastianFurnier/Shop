@@ -10,4 +10,6 @@ import java.util.List;
 public interface ISellRepository extends JpaRepository<Sell, Long> {
     Sell searchSellById(Long id);
     List<Sell> searchSellByUserId(Long id);
+
+    List<Sell> getAll();
 }
