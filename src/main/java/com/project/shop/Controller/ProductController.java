@@ -40,7 +40,7 @@ public class ProductController {
     public ResponseEntity<Map<String, String>> deleteProduct(@PathVariable Long id){
         Map<String, String> response = new HashMap<>();
         productService.disableProduct(id);
-        response.put("Product " + id + ":", "disabled");
+        response.put("Product " + id + ":", " disabled");
 
         return ResponseEntity.ok(response);
     }
@@ -63,6 +63,16 @@ public class ProductController {
 
     @GetMapping("/getdisabled")
     public ResponseEntity<Map<String, List<Product>>> getDisabledProducts(){
+        Map<String, List<Product>> response = new HashMap<>();
+        response.put("products", productService.getAllDisabledProducts());
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/filter/{name}&{price}&{category}")
+    public ResponseEntity<Map<String, List<Product>>> getByFilter(@PathVariable String name,
+                                                                  @PathVariable float price, @PathVariable String category){
+
         Map<String, List<Product>> response = new HashMap<>();
         response.put("products", productService.getAllDisabledProducts());
 

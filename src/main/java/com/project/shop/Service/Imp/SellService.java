@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.sql.Date;
 import java.time.Instant;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class SellService implements ISellService {
@@ -50,9 +49,23 @@ public class SellService implements ISellService {
     }
 
     @Override
+    public List<Sell> getAll(){
+        return sellRepository.getAll();
+    }
+
+    @Override
     public Sell cancelSell(Long sellId) {
         Sell sell = sellRepository.searchSellById(sellId);
         sell.setStatus(Status.Canceled);
+
+        sellRepository.save(sell);
+        return sell;
+    }
+
+    @Override
+    public Sell confirmSell(Long sellId) {
+        Sell sell = sellRepository.searchSellById(sellId);
+        sell.setStatus(Status.Paid);
 
         sellRepository.save(sell);
         return sell;
