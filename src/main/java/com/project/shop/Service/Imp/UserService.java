@@ -19,7 +19,7 @@ public class UserService implements IUserService {
         UserDTO userDTO = new UserDTO();
 
         userDTO.setId(newUser.getId());
-        userDTO.setActive(newUser.isActive());
+        userDTO.setActive(newUser.isEnabled());
         userDTO.setName(newUser.getName());
         userDTO.setLastname(newUser.getLastname());
         userDTO.setAddress(newUser.getAddress());
@@ -38,7 +38,7 @@ public class UserService implements IUserService {
     @Override
     public void deleteUser(Long userId) {
         User user = userRepository.searchUserById(userId);
-        user.setActive(false);
+        user.setEnabled(false);
     }
 
     @Override

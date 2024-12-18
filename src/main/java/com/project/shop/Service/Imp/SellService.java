@@ -50,7 +50,7 @@ public class SellService implements ISellService {
 
     @Override
     public List<Sell> getAll(){
-        return sellRepository.getAll();
+        return sellRepository.findAll();
     }
 
     @Override
