@@ -22,9 +22,7 @@ public class Sell {
     private Date sellDate;
     private float finalPrice;
     private Status status;
-    @ManyToOne
-    @JoinColumn(name = "userd_id")
-    private User user;
+    private Long userId;
 
     @OneToMany(mappedBy = "sell", cascade = CascadeType.ALL)
     private List<SellItem> itemsList;

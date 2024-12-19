@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Date;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SellService implements ISellService {
@@ -35,7 +36,7 @@ public class SellService implements ISellService {
         Sell newSell = new Sell();
 
         newSell.setItemsList(products);
-        newSell.setUser(userRepository.searchUserById(userId));
+        newSell.setUserId(userId);
         newSell.setSellDate(Date.from(Instant.now()));
         newSell.setFinalPrice(getFinalPrice(products));
         newSell.setStatus(Status.Pending);
@@ -50,24 +51,27 @@ public class SellService implements ISellService {
 
     @Override
     public List<Sell> getAll(){
-        return sellRepository.getAll();
+        return sellRepository.findAll();
     }
 
     @Override
     public Sell cancelSell(Long sellId) {
-        Sell sell = sellRepository.searchSellById(sellId);
-        sell.setStatus(Status.Canceled);
+        Optional<Sell> sell = sellRepository.findById(sellId);
+        Sell sellAux = sell.get();
+        sellAux.setStatus(Status.Canceled);
 
-        sellRepository.save(sell);
-        return sell;
+        sellRepository.save(sellAux);
+        return sellAux;
     }
 
     @Override
     public Sell confirmSell(Long sellId) {
-        Sell sell = sellRepository.searchSellById(sellId);
-        sell.setStatus(Status.Paid);
+        Optional<Sell> sell = sellRepository.findById(sellId);
+        Sell sellAux = sell.get();
 
-        sellRepository.save(sell);
-        return sell;
+        sellAux.setStatus(Status.Paid);
+
+        sellRepository.save(sellAux);
+        return sellAux;
     }
 }

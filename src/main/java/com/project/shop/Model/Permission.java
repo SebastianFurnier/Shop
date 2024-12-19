@@ -19,4 +19,5 @@ public class Permission {
     private Long id;
     @Column(unique = true, nullable = false)
     private String permissionName;
+    private boolean active;
 }
