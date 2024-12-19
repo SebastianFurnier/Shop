@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PermissionService implements IPermissionService {
+public class PermissionServiceImp implements IPermissionService {
 
     @Autowired
     private IPermissionRepository permissionRepository;
@@ -21,24 +21,32 @@ public class PermissionService implements IPermissionService {
     }
 
     @Override
-    public Optional findById(Long id) {
-        return permissionRepository.findById(id);
+    public Permission findById(Long id) {
+        Optional<Permission> permissionAux = permissionRepository.findById(id);
+
+        return permissionAux.orElse(null);
     }
 
     @Override
-    public Permission save(Permission permission) {
+    public Permission save(String name) {
+        Permission permission = new Permission();
+        permission.setPermissionName(name);
+        permission.setActive(true);
         return permissionRepository.save(permission);
     }
 
     @Override
-    public void deleteById(Long id) {
+    public Permission deleteById(Long id) {
         Optional<Permission> permission = permissionRepository.findById(id);
 
         if (permission.isEmpty())
-            return;
+            return null;
 
         Permission permissionAux = permission.get();
         permissionAux.setActive(false);
+
+        permissionRepository.save(permissionAux);
+        return permissionAux;
     }
 
     @Override

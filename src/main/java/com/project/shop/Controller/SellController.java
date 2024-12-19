@@ -2,7 +2,6 @@ package com.project.shop.Controller;
 
 import com.project.shop.Model.Sell;
 import com.project.shop.Model.SellItem;
-import com.project.shop.Model.User;
 import com.project.shop.Service.ISellService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;

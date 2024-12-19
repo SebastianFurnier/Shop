@@ -16,7 +16,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Table(name = "users")
-public class User {
+public class UserSec {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

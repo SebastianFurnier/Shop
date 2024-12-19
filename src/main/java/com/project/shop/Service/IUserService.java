@@ -1,12 +1,13 @@
 package com.project.shop.Service;
 
 import com.project.shop.DTO.UserDTO;
-import com.project.shop.Model.User;
+import com.project.shop.Model.UserSec;
 
 public interface IUserService {
-    UserDTO createUser(User user);
-    User editUser(User user);
+    UserDTO createUser(UserSec userSec);
+    UserSec editUser(UserSec userSec);
     void deleteUser(Long userId);
-    User editPassword(String newPassword);
+    UserSec editPassword(String newPassword);
+    public String encriptPassword(String password);
 
 }
