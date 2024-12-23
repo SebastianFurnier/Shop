@@ -1,5 +1,6 @@
 package com.project.shop.Service.Imp;
 
+import com.project.shop.ExceptionHandler.ResourceNotFoundException;
 import com.project.shop.Model.Permission;
 import com.project.shop.Repository.IPermissionRepository;
 import com.project.shop.Service.IPermissionService;
@@ -24,7 +25,10 @@ public class PermissionServiceImp implements IPermissionService {
     public Permission findById(Long id) {
         Optional<Permission> permissionAux = permissionRepository.findById(id);
 
-        return permissionAux.orElse(null);
+        if (permissionAux.isEmpty())
+            throw new ResourceNotFoundException("This is doesn't exist.");
+
+        return permissionAux.get();
     }
 
     @Override
@@ -40,7 +44,7 @@ public class PermissionServiceImp implements IPermissionService {
         Optional<Permission> permission = permissionRepository.findById(id);
 
         if (permission.isEmpty())
-            return null;
+            throw new ResourceNotFoundException("This is doesn't exist.");
 
         Permission permissionAux = permission.get();
         permissionAux.setActive(false);

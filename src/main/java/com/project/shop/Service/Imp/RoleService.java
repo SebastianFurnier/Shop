@@ -1,5 +1,6 @@
 package com.project.shop.Service.Imp;
 
+import com.project.shop.ExceptionHandler.ResourceNotFoundException;
 import com.project.shop.Model.Role;
 import com.project.shop.Repository.IRoleRepository;
 import com.project.shop.Service.IRoleService;
@@ -13,41 +14,44 @@ import java.util.Optional;
 public class RoleService implements IRoleService {
 
     @Autowired
-    private IRoleRepository iRoleRepository;
+    private IRoleRepository roleRepository;
 
     @Override
     public List<Role> findAll() {
-        return iRoleRepository.findAll();
+        return roleRepository.findAll();
     }
 
     @Override
     public Role findById(Long id) {
-        Optional<Role> roleAux = iRoleRepository.findById(id);
+        Optional<Role> roleAux = roleRepository.findById(id);
 
-        return roleAux.orElse(null);
+        if (roleAux.isEmpty())
+            throw new ResourceNotFoundException("This id isn't exist.");
+
+        return roleAux.get();
     }
 
     @Override
     public Role save(Role role) {
-        return iRoleRepository.save(role);
+        return roleRepository.save(role);
     }
 
     @Override
     public Role deleteById(Long id) {
-        Optional<Role> roleAux = iRoleRepository.findById(id);
+        Optional<Role> roleAux = roleRepository.findById(id);
 
         if (roleAux.isEmpty())
-            return null;
+            throw new ResourceNotFoundException("This id isn't exist.");
 
         Role role = roleAux.get();
         role.setActive(false);
-        iRoleRepository.save(role);
+        roleRepository.save(role);
 
         return role;
     }
 
     @Override
     public Role update(Role role) {
-        return iRoleRepository.save(role);
+        return roleRepository.save(role);
     }
 }
