@@ -28,10 +28,20 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/permissions").hasRole("ADMIN")
-                        .requestMatchers("/roles").hasRole("ADMIN")
-                        .requestMatchers("/sell").hasRole("USER")
-                        .requestMatchers("/users/create").permitAll()
+                        .requestMatchers("/products/create").hasAuthority("CREATE")
+                        .requestMatchers("/products/edit").hasAuthority("CREATE")
+                        .requestMatchers("/products/delete/**").permitAll()
+                        .requestMatchers("/products/reactivate/**").hasAuthority("CREATE")
+                        .requestMatchers("/products/get/**").permitAll()
+                        .requestMatchers("/products/getall").permitAll()
+                        .requestMatchers("/products/getdisabled").hasRole("ADMIN")
+                        .requestMatchers("/products/filter/**").permitAll()
+                        .requestMatchers("/getbyhprice").permitAll()
+                        .requestMatchers("/getbylprice").permitAll()
+                        .requestMatchers("/getbyascname").permitAll()
+                        .requestMatchers("/getbydescname").permitAll()
+                        .requestMatchers("/roles/**").hasRole("ADMIN")
+
                         .anyRequest().authenticated())
                 .build();
     }

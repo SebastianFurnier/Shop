@@ -1,23 +1,27 @@
 package com.project.shop.Controller;
 
+import com.project.shop.ExceptionHandler.ResourceNotFoundException;
 import com.project.shop.Model.Product;
 import com.project.shop.Service.IProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.ResourceAccessException;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/products")
 public class ProductController {
     @Autowired
     private IProductService productService;
 
     @PostMapping("/create")
-    public ResponseEntity<Map<String, Product>> createProduct(@RequestBody Product product){
+    public ResponseEntity<Map<String, Product>> createProduct(@Valid @RequestBody Product product) {
 
         Map<String, Product> response = new HashMap<>();
         response.put("product",
@@ -27,7 +31,7 @@ public class ProductController {
     }
 
     @PutMapping("/edit")
-    public ResponseEntity<Map<String, Product>> editProduct(@RequestBody Product product){
+    public ResponseEntity<Map<String, Product>> editProduct(@Valid @RequestBody Product product) {
 
         Map<String, Product> response = new HashMap<>();
         response.put("product",
@@ -37,16 +41,26 @@ public class ProductController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Map<String, String>> deleteProduct(@PathVariable Long id){
+    public ResponseEntity<Map<String, String>> deleteProduct(@PathVariable Long id) {
         Map<String, String> response = new HashMap<>();
-        productService.disableProduct(id);
-        response.put("Product " + id + ":", " disabled");
+        productService.deleteProduct(id);
+        response.put("product", "product " + id + " disabled");
 
         return ResponseEntity.ok(response);
     }
 
+    @PutMapping("/reactivate/{id}")
+    public ResponseEntity<Map<String, Product>> reactivateProduct(@PathVariable Long id) {
+        Map<String, Product> response = new HashMap<>();
+        response.put("product",
+                productService.reactivateProduct(id));
+
+        return ResponseEntity.ok(response);
+    }
+
+
     @GetMapping("/get/{id}")
-    public ResponseEntity<Map<String, Product>> getProduct(@PathVariable Long id){
+    public ResponseEntity<Map<String, Product>> getProduct(@PathVariable Long id) {
         Map<String, Product> response = new HashMap<>();
         response.put("product", productService.getActiveProduct(id));
 
@@ -54,7 +68,7 @@ public class ProductController {
     }
 
     @GetMapping("/getall")
-    public ResponseEntity<Map<String, List<Product>>> getActiveProducts(){
+    public ResponseEntity<Map<String, List<Product>>> getActiveProducts() {
         Map<String, List<Product>> response = new HashMap<>();
         response.put("products", productService.getActiveProducts());
 
@@ -62,7 +76,7 @@ public class ProductController {
     }
 
     @GetMapping("/getdisabled")
-    public ResponseEntity<Map<String, List<Product>>> getDisabledProducts(){
+    public ResponseEntity<Map<String, List<Product>>> getDisabledProducts() {
         Map<String, List<Product>> response = new HashMap<>();
         response.put("products", productService.getAllDisabledProducts());
 
@@ -70,17 +84,18 @@ public class ProductController {
     }
 
     @GetMapping("/filter/{name}&{price}&{category}")
-    public ResponseEntity<Map<String, List<Product>>> getByFilter(@PathVariable String name,
-                                                                  @PathVariable float price, @PathVariable String category){
+    public ResponseEntity<Map<String, List<Product>>> getByFilter(@RequestParam(required = false) String name,
+                                                                  @RequestParam(required = false) float price,
+                                                                  @RequestParam(required = false) String category) {
 
         Map<String, List<Product>> response = new HashMap<>();
-        response.put("products", productService.getAllDisabledProducts());
+        response.put("products", productService.getByFilter(name, price, category));
 
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/getbyhprice")
-    public ResponseEntity<Map<String, List<Product>>> getProductsByHighPrice(){
+    public ResponseEntity<Map<String, List<Product>>> getProductsByHighPrice() {
         Map<String, List<Product>> response = new HashMap<>();
         response.put("products", productService.getActiveProductsByHigherPrice());
 
@@ -88,7 +103,7 @@ public class ProductController {
     }
 
     @GetMapping("/getbylprice")
-    public ResponseEntity<Map<String, List<Product>>> getProductsByLowPrice(){
+    public ResponseEntity<Map<String, List<Product>>> getProductsByLowPrice() {
         Map<String, List<Product>> response = new HashMap<>();
         response.put("products", productService.getActiveProductsByLowerPrice());
 
@@ -96,7 +111,7 @@ public class ProductController {
     }
 
     @GetMapping("/getbyascname")
-    public ResponseEntity<Map<String, List<Product>>> getProductsByAscName(){
+    public ResponseEntity<Map<String, List<Product>>> getProductsByAscName() {
         Map<String, List<Product>> response = new HashMap<>();
         response.put("products", productService.getActiveProductsByAlphabeticAZOrder());
 
@@ -104,7 +119,7 @@ public class ProductController {
     }
 
     @GetMapping("/getbydescname")
-    public ResponseEntity<Map<String, List<Product>>> getProductsByDescName(){
+    public ResponseEntity<Map<String, List<Product>>> getProductsByDescName() {
         Map<String, List<Product>> response = new HashMap<>();
         response.put("products", productService.getActiveProductsByAlphabeticZAOrder());
 

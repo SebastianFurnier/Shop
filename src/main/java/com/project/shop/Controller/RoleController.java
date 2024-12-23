@@ -1,13 +1,18 @@
 package com.project.shop.Controller;
 
+import com.project.shop.ExceptionHandler.ResourceNotFoundException;
 import com.project.shop.Model.Role;
 import com.project.shop.Service.IRoleService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/roles")
@@ -16,7 +21,7 @@ public class RoleController {
     private IRoleService roleService;
 
     @PostMapping("/create")
-    public ResponseEntity<Role> createRole(@RequestBody Role role){
+    public ResponseEntity<Role> createRole(@Valid @RequestBody Role role){
         return ResponseEntity.ok(roleService.save(role));
     }
 
@@ -36,7 +41,7 @@ public class RoleController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Role> updateRole(@RequestBody Role role){
+    public ResponseEntity<Role> updateRole(@Valid @RequestBody Role role){
         return ResponseEntity.ok(roleService.update(role));
     }
 }

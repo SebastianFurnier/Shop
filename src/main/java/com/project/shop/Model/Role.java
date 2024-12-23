@@ -1,6 +1,7 @@
 package com.project.shop.Model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,8 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String role;
+    @NotBlank(message = "Name cannot be empty.")
+    private String name;
     private boolean active;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

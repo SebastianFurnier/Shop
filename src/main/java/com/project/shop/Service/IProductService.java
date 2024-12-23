@@ -7,13 +7,14 @@ import java.util.List;
 public interface IProductService {
     Product createProduct(Product product);
     Product editProduct(Product product);
-    void disableProduct(Long id);
+    void deleteProduct(Long id);
     Product getActiveProduct(Long id);
     List<Product> getActiveProducts();
-    Product getDisabledProduct(Long id);
+    Product reactivateProduct(Long id);
     List<Product> getAllDisabledProducts();
     List<Product> getActiveProductsByHigherPrice();
     List<Product> getActiveProductsByLowerPrice();
     List<Product> getActiveProductsByAlphabeticAZOrder();
     List<Product> getActiveProductsByAlphabeticZAOrder();
+    List<Product> getByFilter(String name, float price, String category);
 }

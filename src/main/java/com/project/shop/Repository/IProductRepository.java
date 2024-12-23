@@ -2,6 +2,7 @@ package com.project.shop.Repository;
 
 import com.project.shop.Model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,5 +16,6 @@ public interface IProductRepository extends JpaRepository<Product, Long> {
     List<Product> getProductsByActiveOrderByPriceDesc(boolean active);
     List<Product> getProductsByActiveOrderByNameAsc(boolean active);
     List<Product> getProductsByActiveOrderByNameDesc(boolean active);
+    //List<Product> getByFilter(String name, float price, String category);
 
 }
