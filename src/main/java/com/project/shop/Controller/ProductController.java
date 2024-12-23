@@ -2,8 +2,10 @@ package com.project.shop.Controller;
 
 import com.project.shop.Model.Product;
 import com.project.shop.Service.IProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -11,13 +13,23 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/products")
 public class ProductController {
     @Autowired
     private IProductService productService;
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException exception) {
+        Map<String, String> errors = new HashMap<>();
+
+        exception.getBindingResult().getFieldErrors().forEach(error ->
+                errors.put("error", error.getDefaultMessage())
+        );
+        return ResponseEntity.badRequest().body(errors);
+    }
+
     @PostMapping("/create")
-    public ResponseEntity<Map<String, Product>> createProduct(@RequestBody Product product){
+    public ResponseEntity<Map<String, Product>> createProduct(@Valid @RequestBody Product product){
 
         Map<String, Product> response = new HashMap<>();
         response.put("product",
@@ -70,11 +82,12 @@ public class ProductController {
     }
 
     @GetMapping("/filter/{name}&{price}&{category}")
-    public ResponseEntity<Map<String, List<Product>>> getByFilter(@PathVariable String name,
-                                                                  @PathVariable float price, @PathVariable String category){
+    public ResponseEntity<Map<String, List<Product>>> getByFilter(@RequestParam(required = false) String name,
+                                                                  @RequestParam(required = false) float price,
+                                                                  @RequestParam(required = false) String category){
 
         Map<String, List<Product>> response = new HashMap<>();
-        response.put("products", productService.getAllDisabledProducts());
+        response.put("products", productService.getByFilter(name, price, category));
 
         return ResponseEntity.ok(response);
     }

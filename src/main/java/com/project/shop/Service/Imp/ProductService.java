@@ -1,8 +1,11 @@
 package com.project.shop.Service.Imp;
 
+import com.project.shop.ExceptionHandler.DataErrorException;
 import com.project.shop.Model.Product;
 import com.project.shop.Repository.IProductRepository;
 import com.project.shop.Service.IProductService;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +18,7 @@ public class ProductService implements IProductService {
     private IProductRepository productRepository;
 
     @Override
-    public Product createProduct(Product product) {
-        if (product.getPrice() <= 0) return null;
-        if (product.getName() == null || product.getName().isEmpty())
-            return null;
-
+    public Product createProduct(Product product)  {
         return productRepository.save(product);
     }
 
@@ -82,5 +81,10 @@ public class ProductService implements IProductService {
     @Override
     public List<Product> getActiveProductsByAlphabeticZAOrder() {
         return productRepository.getProductsByActiveOrderByNameDesc(true);
+    }
+
+    @Override
+    public List<Product> getByFilter(String name, float price, String category) {
+        return null; //productRepository.getByFilter(name, price, category);
     }
 }

@@ -16,4 +16,5 @@ public interface IProductService {
     List<Product> getActiveProductsByLowerPrice();
     List<Product> getActiveProductsByAlphabeticAZOrder();
     List<Product> getActiveProductsByAlphabeticZAOrder();
+    List<Product> getByFilter(String name, float price, String category);
 }
