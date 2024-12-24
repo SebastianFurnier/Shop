@@ -1,5 +1,7 @@
 package com.project.shop.Configuration;
 
+import com.project.shop.Utils.JwtUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,14 +17,19 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
 
+    @Autowired
+    private JwtUtils jwtUtils;
+
     @Bean
     public SecurityFilterChain filterChain (HttpSecurity httpSecurity) throws Exception {
+
         return httpSecurity
                 .csrf(csrf -> csrf.disable())
                 .httpBasic(Customizer.withDefaults())
@@ -37,12 +44,15 @@ public class SecurityConfig {
                         .requestMatchers("/products/getdisabled").hasRole("ADMIN")
                         .requestMatchers("/products/filter/**").permitAll()
                         .requestMatchers("/getbyhprice").permitAll()
-                        .requestMatchers("/getbylprice").permitAll()
-                        .requestMatchers("/getbyascname").permitAll()
-                        .requestMatchers("/getbydescname").permitAll()
+                        .requestMatchers("/products/getbylprice").permitAll()
+                        .requestMatchers("/products/getbyascname").permitAll()
+                        .requestMatchers("/products/getbydescname").permitAll()
                         .requestMatchers("/roles/**").hasRole("ADMIN")
-
+                        .requestMatchers("/permission/**").hasRole("ADMIN")
+                        .requestMatchers("/auth/**").permitAll()
                         .anyRequest().authenticated())
+
+                .addFilterBefore(new JwtTokenValidator(jwtUtils), BasicAuthenticationFilter.class)
                 .build();
     }
 

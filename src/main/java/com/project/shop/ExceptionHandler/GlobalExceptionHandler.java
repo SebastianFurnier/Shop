@@ -1,6 +1,7 @@
 package com.project.shop.ExceptionHandler;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,8 +21,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(errors);
     }
 
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleValidationException(ResourceNotFoundException exception) {
+    @ExceptionHandler({ResourceNotFoundException.class, BadCredentialsException.class})
+    public ResponseEntity<Map<String, String>> handleValidationException(Exception exception) {
         Map<String, String> errors = new HashMap<>();
         errors.put("error", exception.getMessage());
         return ResponseEntity.badRequest().body(errors);
