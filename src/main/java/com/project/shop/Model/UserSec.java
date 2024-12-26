@@ -1,5 +1,6 @@
 package com.project.shop.Model;
 
+import com.project.shop.DTO.CreationalUserDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,4 +40,19 @@ public class UserSec {
     @JoinTable (name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> rolesList = new HashSet<>();
+
+    public UserSec (CreationalUserDTO user){
+        this.enabled = true;
+        this.username = user.getUsername();
+        this.name = user.getName();
+        this.lastname = user.getLastname();
+        this.address = user.getAddress();
+        this.email = user.getEmail();
+        this.phoneNumber = user.getPhoneNumber();
+        this.birthday = user.getBirthday();
+
+        this.accountNotExpired = true;
+        this.accountNotLocked = true;
+        this.credentialNotExpired = true;
+    }
 }

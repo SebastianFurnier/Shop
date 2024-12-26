@@ -50,7 +50,8 @@ public class SecurityConfig {
                         .requestMatchers("/roles/**").hasRole("ADMIN")
                         .requestMatchers("/permission/**").hasRole("ADMIN")
                         .requestMatchers("/auth/**").permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers("/sells/getall").hasRole("ADMIN")
+                        .anyRequest().permitAll())
 
                 .addFilterBefore(new JwtTokenValidator(jwtUtils), BasicAuthenticationFilter.class)
                 .build();

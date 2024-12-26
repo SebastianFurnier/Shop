@@ -1,80 +1,106 @@
 package com.project.shop.Service.Imp;
 
+import com.project.shop.DTO.CreationalUserDTO;
 import com.project.shop.DTO.UserDTO;
-import com.project.shop.Model.Role;
+import com.project.shop.ExceptionHandler.ResourceNotFoundException;
 import com.project.shop.Model.UserSec;
 import com.project.shop.Repository.IUserRepository;
-import com.project.shop.Service.IRoleService;
 import com.project.shop.Service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Optional;
 
 @Service
 public class UserService implements IUserService {
     @Autowired
     private IUserRepository userRepository;
-    @Autowired
-    private IRoleService roleService;
 
     @Override
-    public UserDTO createUser(UserSec userSec) {
+    public UserDTO createUser(CreationalUserDTO user) {
 
-        Set<Role> roleList = new HashSet<>();
+        UserSec newUserSec = new UserSec(user);
+        newUserSec.setPassword(this.encryptPassword(user.getPassword()));
 
-        Role readRole;
+        userRepository.save(newUserSec);
+        return new UserDTO(newUserSec);
+    }
 
-        userSec.setPassword(encriptPassword(userSec.getPassword()));
+    @Override
+    public UserDTO editUser(UserDTO userDTO) {
+        Optional<UserSec> userOptional = userRepository.findById(userDTO.getId());
 
-        for (Role role : userSec.getRolesList()){
-            readRole = roleService.findById(role.getId());
-            if (readRole != null) {
-                roleList.add(readRole);
-            }
-        }
+        if (userOptional.isEmpty())
+            throw new ResourceNotFoundException("This user doesn't exist.");
 
-        if (!roleList.isEmpty())
-            return null;
+        UserSec userSec = userOptional.get();
 
-        userSec.setRolesList(roleList);
+        userSec.setName(userDTO.getName());
+        userSec.setLastname(userDTO.getLastname());
+        userSec.setAddress(userDTO.getAddress());
+        userSec.setEmail(userDTO.getEmail());
+        userSec.setPhoneNumber(userDTO.getPhoneNumber());
+        userSec.setBirthday(userDTO.getBirthday());
+        userSec.setEnabled(userDTO.isActive());
 
-        UserSec newUserSec = userRepository.save(userSec);
-
-        UserDTO userDTO = new UserDTO();
-
-        userDTO.setId(newUserSec.getId());
-        userDTO.setActive(newUserSec.isEnabled());
-        userDTO.setName(newUserSec.getName());
-        userDTO.setLastname(newUserSec.getLastname());
-        userDTO.setAddress(newUserSec.getAddress());
-        userDTO.setEmail(newUserSec.getEmail());
-        userDTO.setPhoneNumber(newUserSec.getPhoneNumber());
-        userDTO.setBirthday(newUserSec.getBirthday());
+        userRepository.save(userSec);
 
         return userDTO;
     }
 
     @Override
-    public UserSec editUser(UserSec userSec) {
-        return userRepository.save(userSec);
-    }
-
-    @Override
     public void deleteUser(Long userId) {
-        UserSec userSec = userRepository.searchUserById(userId);
-        userSec.setEnabled(false);
+        Optional<UserSec> userSec = userRepository.findById(userId);
+
+        if (userSec.isEmpty())
+            throw new ResourceNotFoundException("This user doesn't exist.");
+
+        UserSec user = userSec.get();
+        user.setEnabled(false);
+
+        userRepository.save(user);
     }
 
     @Override
-    public UserSec editPassword(String newPassword) {
-        return null;
+    public UserDTO editPassword(UserSec user) {
+        Optional<UserSec> userOptional = userRepository.findById(user.getId());
+
+        if (userOptional.isEmpty())
+            throw new ResourceNotFoundException("This user doesn't exist.");
+
+        UserSec userSecAux = userOptional.get();
+        userSecAux.setPassword(this.encryptPassword(user.getPassword()));
+
+        userRepository.save(userSecAux);
+
+        return new UserDTO(userSecAux);
     }
 
     @Override
-    public String encriptPassword(String password) {
+    public String encryptPassword(String password) {
         return new BCryptPasswordEncoder().encode(password);
+    }
+
+    @Override
+    public UserDTO getUserById(long id) {
+        Optional<UserSec> userOptional = userRepository.findById(id);
+
+        if (userOptional.isEmpty())
+            throw new ResourceNotFoundException("This id doesn't exist.");
+
+        return new UserDTO(userOptional.get());
+    }
+
+    @Override
+    public UserDTO getUserByUsername(String name) {
+
+        Optional<UserSec> userOptional = userRepository.findUserEntityByUsername(name);
+
+        if (userOptional.isEmpty())
+            throw new ResourceNotFoundException("This id doesn't exist.");
+
+
+        return new UserDTO(userOptional.get());
     }
 }

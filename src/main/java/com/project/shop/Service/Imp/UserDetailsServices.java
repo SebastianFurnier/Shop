@@ -63,8 +63,8 @@ public class UserDetailsServices implements UserDetailsService {
         Authentication authentication = this.authenticate(username, password);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String accesToken = jwtUtils.createToken(authentication);
-        return new AuthResponseDTO(username, "login ok", accesToken, true);
+        String accessToken = jwtUtils.createToken(authentication);
+        return new AuthResponseDTO(username, "login ok", accessToken, true);
     }
 
     public Authentication authenticate(String username, String password) {

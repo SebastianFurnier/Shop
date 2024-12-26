@@ -10,11 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/sell")
-@PreAuthorize("denyAll()")
+@RequestMapping("/sells")
 public class SellController {
-
-    //Configurar @PreAuthorize en cada metodo
 
     @Autowired
     private ISellService sellService;
