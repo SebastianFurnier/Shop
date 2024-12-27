@@ -1,5 +1,6 @@
 C:\Users\bitef\OneDrive\Escritorio\Shop\src\main\java\com\project\shop\Configuration\JwtTokenValidator.java
 C:\Users\bitef\OneDrive\Escritorio\Shop\src\main\java\com\project\shop\Configuration\SecurityConfig.java
+C:\Users\bitef\OneDrive\Escritorio\Shop\src\main\java\com\project\shop\Configuration\WebConfig.java
 C:\Users\bitef\OneDrive\Escritorio\Shop\src\main\java\com\project\shop\Controller\AuthenticationController.java
 C:\Users\bitef\OneDrive\Escritorio\Shop\src\main\java\com\project\shop\Controller\PermissionController.java
 C:\Users\bitef\OneDrive\Escritorio\Shop\src\main\java\com\project\shop\Controller\ProductController.java
@@ -8,6 +9,7 @@ C:\Users\bitef\OneDrive\Escritorio\Shop\src\main\java\com\project\shop\Controlle
 C:\Users\bitef\OneDrive\Escritorio\Shop\src\main\java\com\project\shop\Controller\UserController.java
 C:\Users\bitef\OneDrive\Escritorio\Shop\src\main\java\com\project\shop\DTO\AuthLoginRequestDTO.java
 C:\Users\bitef\OneDrive\Escritorio\Shop\src\main\java\com\project\shop\DTO\AuthResponseDTO.java
+C:\Users\bitef\OneDrive\Escritorio\Shop\src\main\java\com\project\shop\DTO\CreationalUserDTO.java
 C:\Users\bitef\OneDrive\Escritorio\Shop\src\main\java\com\project\shop\DTO\UserDTO.java
 C:\Users\bitef\OneDrive\Escritorio\Shop\src\main\java\com\project\shop\Enum\Status.java
 C:\Users\bitef\OneDrive\Escritorio\Shop\src\main\java\com\project\shop\ExceptionHandler\BadRequestException.java

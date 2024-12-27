@@ -9,6 +9,7 @@ com\project\shop\Service\IRoleService.class
 com\project\shop\ShopApplication.class
 com\project\shop\Repository\IPermissionRepository.class
 com\project\shop\Service\IUserService.class
+com\project\shop\DTO\CreationalUserDTO.class
 com\project\shop\DTO\UserDTO.class
 com\project\shop\Service\Imp\UserDetailsServices.class
 com\project\shop\Model\Sell.class
@@ -36,6 +37,7 @@ com\project\shop\Model\UserSec.class
 com\project\shop\Repository\IRoleRepository.class
 com\project\shop\ExceptionHandler\DataErrorException.class
 com\project\shop\Utils\JwtUtils.class
+com\project\shop\Configuration\WebConfig.class
 com\project\shop\Repository\ISellRepository.class
 com\project\shop\Service\Imp\UserService.class
 com\project\shop\Service\Imp\ProductService.class
