@@ -67,5 +67,4 @@ public class JwtUtils {
     public Map<String, Claim> returnAllClaims (DecodedJWT decodedJWT){
         return decodedJWT.getClaims();
     }
-
 }

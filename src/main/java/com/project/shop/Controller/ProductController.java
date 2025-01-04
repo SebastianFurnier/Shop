@@ -30,6 +30,16 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/createbylist")
+    public ResponseEntity<Map<String, List<Product>>> createProductsByList(@Valid @RequestBody List<Product> products) {
+
+        Map<String, List<Product>> response = new HashMap<>();
+        response.put("product",
+                productService.createProductsByList(products));
+
+        return ResponseEntity.ok(response);
+    }
+
     @PutMapping("/edit")
     public ResponseEntity<Map<String, Product>> editProduct(@Valid @RequestBody Product product) {
 
@@ -83,9 +93,9 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/filter/{name}&{price}&{category}")
+    @GetMapping("/filter")
     public ResponseEntity<Map<String, List<Product>>> getByFilter(@RequestParam(required = false) String name,
-                                                                  @RequestParam(required = false) float price,
+                                                                  @RequestParam(required = false) Float price,
                                                                   @RequestParam(required = false) String category) {
 
         Map<String, List<Product>> response = new HashMap<>();
