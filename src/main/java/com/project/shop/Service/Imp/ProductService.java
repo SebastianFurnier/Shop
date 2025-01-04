@@ -91,6 +91,26 @@ public class ProductService implements IProductService {
 
     @Override
     public List<Product> getByFilter(String name, float price, String category) {
-        return null; //productRepository.getByFilter(name, price, category);
+
+        if (name.isEmpty() && price == 0 && category.isEmpty())
+            return getActiveProducts();
+
+
+        return productRepository.findByFilters(name, price, category);
+    }
+
+    @Override
+    public List<Product> createProductsByList(List<Product> products) {
+
+        Product productAux;
+
+        for(Product product : products){
+            productAux = createProduct(product);
+
+            if (productAux == null)
+                throw new ResourceNotFoundException("Server can't save following product: " + product.getName());
+        }
+
+        return products;
     }
 }
