@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,11 @@ public class RoleController {
 
     @PostMapping("/create")
     public ResponseEntity<Role> createRole(@Valid @RequestBody Role role){
-        return ResponseEntity.ok(roleService.save(role));
+        Role roleCreated = roleService.save(role);
+
+        URI location = URI.create(String.format("/roles/get/%d", roleCreated.getId()));
+
+        return ResponseEntity.created(location).body(roleCreated);
     }
 
     @GetMapping("/getall")

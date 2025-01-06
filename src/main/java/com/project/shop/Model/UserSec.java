@@ -28,6 +28,7 @@ public class UserSec {
     private String lastname;
     private String password;
     private String address;
+    @Column(unique = true)
     private String email;
     private String phoneNumber;
     private Date birthday;

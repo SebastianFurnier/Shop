@@ -1,15 +1,13 @@
 package com.project.shop.Controller;
 
-import com.project.shop.ExceptionHandler.ResourceNotFoundException;
 import com.project.shop.Model.Product;
 import com.project.shop.Service.IProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.ResourceAccessException;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +15,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/products")
 public class ProductController {
+
     @Autowired
     private IProductService productService;
 
@@ -24,20 +23,26 @@ public class ProductController {
     public ResponseEntity<Map<String, Product>> createProduct(@Valid @RequestBody Product product) {
 
         Map<String, Product> response = new HashMap<>();
-        response.put("product",
-                productService.createProduct(product));
+        Product productCreated = productService.createProduct(product);
 
-        return ResponseEntity.ok(response);
+        response.put("product", productCreated);
+
+        URI location = URI.create(String.format("/products/get/%d",  productCreated.getId()));
+
+        return ResponseEntity.created(location).body(response);
     }
 
     @PostMapping("/createbylist")
     public ResponseEntity<Map<String, List<Product>>> createProductsByList(@Valid @RequestBody List<Product> products) {
 
         Map<String, List<Product>> response = new HashMap<>();
-        response.put("product",
-                productService.createProductsByList(products));
+        List<Product> productsCreated = productService.createProductsByList(products);
 
-        return ResponseEntity.ok(response);
+        response.put("products", productsCreated);
+
+        URI location = URI.create(String.format("/product/getall", products));
+
+        return ResponseEntity.created(location).body(response);
     }
 
     @PutMapping("/edit")
@@ -67,7 +72,6 @@ public class ProductController {
 
         return ResponseEntity.ok(response);
     }
-
 
     @GetMapping("/get/{id}")
     public ResponseEntity<Map<String, Product>> getProduct(@PathVariable Long id) {

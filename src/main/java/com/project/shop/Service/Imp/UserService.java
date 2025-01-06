@@ -3,6 +3,7 @@ package com.project.shop.Service.Imp;
 import com.project.shop.DTO.CreationalUserDTO;
 import com.project.shop.DTO.UserDTO;
 import com.project.shop.ExceptionHandler.ResourceNotFoundException;
+import com.project.shop.ExceptionHandler.UserDataNotAccepted;
 import com.project.shop.Model.UserSec;
 import com.project.shop.Repository.IUserRepository;
 import com.project.shop.Service.IUserService;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Optional;
 
 @Service
