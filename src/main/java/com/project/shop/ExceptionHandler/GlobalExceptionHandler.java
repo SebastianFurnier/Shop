@@ -1,5 +1,6 @@
 package com.project.shop.ExceptionHandler;
 
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -15,6 +16,7 @@ import java.util.Map;
 public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException exception) {
+
         Map<String, String> errors = new HashMap<>();
 
         exception.getBindingResult().getFieldErrors().forEach(error ->
@@ -40,15 +42,24 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errors);
     }
 
-    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
-    public ResponseEntity<Map<String, String>> userDataNotAccepted(SQLIntegrityConstraintViolationException exception) {
+    @ExceptionHandler(UserDataNotAccepted.class)
+    public ResponseEntity<Map<String, String>> userDataNotAccepted(UserDataNotAccepted exception) {
 
         Map<String, String> errors = new HashMap<>();
+        errors.put("error", exception.getMessage());
 
-        if (exception.getMessage().contains("users"))
-            errors.put("error", "This username is already in use.");
-        else
-            errors.put("error", exception.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Map<String, String>> userDataEmptyErrors (ConstraintViolationException exception) {
+        Map<String, String> errors = new HashMap<>();
+
+        exception.getConstraintViolations().forEach(violation -> {
+            String fieldName = violation.getPropertyPath().toString();
+            String errorMessage = violation.getMessage();
+            errors.put(fieldName, errorMessage);
+        });
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
