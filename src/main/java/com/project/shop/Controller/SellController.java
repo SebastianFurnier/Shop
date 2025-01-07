@@ -4,9 +4,11 @@ import com.project.shop.Model.Sell;
 import com.project.shop.Model.SellItem;
 import com.project.shop.Service.ISellService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -17,27 +19,32 @@ public class SellController {
     private ISellService sellService;
 
     @PostMapping("/create")
-    public Sell createSell(@RequestBody List<SellItem> itemList, @RequestBody Long id) {
-        return  sellService.createSell(itemList, id);
+    public ResponseEntity<Sell> createSell(@RequestBody List<SellItem> itemList, @RequestBody Long userId) {
+
+        Sell sell = sellService.createSell(itemList, userId);
+
+        URI location = URI.create(String.format("/sells/get/%d", sell.getId()));
+
+        return ResponseEntity.created(location).body(sell);
     }
 
     @GetMapping("/getall")
-    public List<Sell> getAllSells() {
-        return sellService.getAll();
+    public ResponseEntity<List<Sell>> getAllSells() {
+        return ResponseEntity.ok(sellService.getAll());
     }
 
-    @GetMapping("/getsells/{id}")
-    public List<Sell> getAllSellByUser(@PathVariable Long id) {
-        return sellService.getAllSellFromUser(id);
+    @GetMapping("/get/{id}")
+    public ResponseEntity<List<Sell>> getAllSellByUser(@PathVariable Long id) {
+        return ResponseEntity.ok(sellService.getAllSellFromUser(id));
     }
 
     @PutMapping("/cancel/{id}")
-    public Sell cancelSell(@PathVariable Long id) {
-        return sellService.cancelSell(id);
+    public ResponseEntity<Sell> cancelSell(@PathVariable Long id) {
+        return ResponseEntity.ok(sellService.cancelSell(id));
     }
 
     @PostMapping("confirm/{id}")
-    public Sell confirmSell(@PathVariable Long id){
-        return sellService.confirmSell(id);
+    public ResponseEntity<Sell> confirmSell(@PathVariable Long id){
+        return ResponseEntity.ok(sellService.confirmSell(id));
     }
 }

@@ -8,6 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -15,9 +20,13 @@ public class UserController {
     private IUserService userService;
 
     @PostMapping("/create")
-    public ResponseEntity<UserDTO> createUser(@RequestBody CreationalUserDTO userSec){
+    public ResponseEntity<UserDTO> createUser(@RequestBody CreationalUserDTO userSec) throws SQLIntegrityConstraintViolationException{
+
         UserDTO newUser = userService.createUser(userSec);
-        return ResponseEntity.ok(newUser);
+
+        URI location = URI.create(String.format("/users/get/%d", newUser.getId()));
+
+        return ResponseEntity.created(location).body(newUser);
     }
 
     @GetMapping("/get/{id}")
@@ -27,7 +36,7 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @GetMapping("/get-by-username/{username}")
+    @GetMapping("/getbyusername/{username}")
     public ResponseEntity<UserDTO> getByUsername(@PathVariable String username) {
         UserDTO user = userService.getUserByUsername(username);
 
@@ -41,7 +50,7 @@ public class UserController {
         return ResponseEntity.ok(editedUser);
     }
 
-    @PutMapping("/edit-password")
+    @PutMapping("/editpassword")
     public ResponseEntity<UserDTO> editPassword(@RequestBody UserSec user){
         UserDTO editedUser = userService.editPassword(user);
 
