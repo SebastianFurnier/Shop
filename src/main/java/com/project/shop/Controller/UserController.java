@@ -1,17 +1,15 @@
 package com.project.shop.Controller;
 
-import com.project.shop.DTO.CreationalUserDTO;
+import com.project.shop.DTO.CreationUserDTO;
 import com.project.shop.DTO.UserDTO;
 import com.project.shop.Model.UserSec;
 import com.project.shop.Service.IUserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.sql.SQLIntegrityConstraintViolationException;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
@@ -20,7 +18,7 @@ public class UserController {
     private IUserService userService;
 
     @PostMapping("/create")
-    public ResponseEntity<UserDTO> createUser(@RequestBody CreationalUserDTO userSec) throws SQLIntegrityConstraintViolationException{
+    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody CreationUserDTO userSec) {
 
         UserDTO newUser = userService.createUser(userSec);
 

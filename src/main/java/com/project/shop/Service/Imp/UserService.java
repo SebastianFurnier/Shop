@@ -1,6 +1,6 @@
 package com.project.shop.Service.Imp;
 
-import com.project.shop.DTO.CreationalUserDTO;
+import com.project.shop.DTO.CreationUserDTO;
 import com.project.shop.DTO.UserDTO;
 import com.project.shop.ExceptionHandler.ResourceNotFoundException;
 import com.project.shop.ExceptionHandler.UserDataNotAccepted;
@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Optional;
 
 @Service
@@ -20,7 +19,17 @@ public class UserService implements IUserService {
     private IUserRepository userRepository;
 
     @Override
-    public UserDTO createUser(CreationalUserDTO user) {
+    public UserDTO createUser(CreationUserDTO user) {
+
+        Optional<UserSec> userExists = userRepository.searchByUsername(user.getUsername());
+
+        if (userExists.isPresent())
+            throw new UserDataNotAccepted("This username is already in use.");
+
+        userExists = userRepository.searchByEmail(user.getEmail());
+
+        if (userExists.isPresent())
+            throw new UserDataNotAccepted("This email is already in use.");
 
         UserSec newUserSec = new UserSec(user);
         newUserSec.setPassword(this.encryptPassword(user.getPassword()));

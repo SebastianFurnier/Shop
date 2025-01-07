@@ -1,7 +1,8 @@
 package com.project.shop.Model;
 
-import com.project.shop.DTO.CreationalUserDTO;
+import com.project.shop.DTO.CreationUserDTO;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,12 +24,14 @@ public class UserSec {
     private Long id;
     private boolean enabled;
     @Column(unique = true)
+    @NotBlank(message = "Username can't be blank or empty.")
     private String username;
     private String name;
     private String lastname;
     private String password;
     private String address;
     @Column(unique = true)
+    @NotBlank(message = "Email can't be empty.")
     private String email;
     private String phoneNumber;
     private Date birthday;
@@ -42,7 +45,7 @@ public class UserSec {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> rolesList = new HashSet<>();
 
-    public UserSec (CreationalUserDTO user){
+    public UserSec (CreationUserDTO user){
         this.enabled = true;
         this.username = user.getUsername();
         this.name = user.getName();
