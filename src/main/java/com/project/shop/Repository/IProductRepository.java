@@ -20,8 +20,10 @@ public interface IProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p WHERE " +
             "(:name IS NULL OR p.name LIKE %:name%) AND " +
             "(:price IS NULL OR p.price >= :price) AND " +
-            "(:category IS NULL OR :category MEMBER OF p.categories)")
+            "(:category IS NULL OR :category MEMBER OF p.categories) AND" +
+            "(:active IS false OR p.active = :active)")
     List<Product> findByFilters(@Param("name") String name,
                                 @Param("price") Float price,
-                                @Param("category") String category);
+                                @Param("category") String category,
+                                @Param("active") boolean active);
 }

@@ -100,10 +100,15 @@ public class ProductController {
     @GetMapping("/filter")
     public ResponseEntity<Map<String, List<Product>>> getByFilter(@RequestParam(required = false) String name,
                                                                   @RequestParam(required = false) Float price,
-                                                                  @RequestParam(required = false) String category) {
+                                                                  @RequestParam(required = false) String category,
+                                                                  @RequestParam(required = false) boolean orderByHPrice,
+                                                                  @RequestParam(required = false) boolean orderByLPrice,
+                                                                  @RequestParam(required = false) boolean orderByNameAz,
+                                                                  @RequestParam(required = false) boolean orderByNameZa){
 
         Map<String, List<Product>> response = new HashMap<>();
-        response.put("products", productService.getByFilter(name, price, category));
+        response.put("products", productService.getByFilter(name, price, category,
+                orderByHPrice, orderByLPrice, orderByNameAz, orderByNameZa));
 
         return ResponseEntity.ok(response);
     }

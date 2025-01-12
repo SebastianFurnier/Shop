@@ -7,6 +7,7 @@ import com.project.shop.Service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -90,13 +91,23 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<Product> getByFilter(String name, float price, String category) {
+    public List<Product> getByFilter(String name, float price, String category,
+                                     boolean orderByHPrice, boolean orderByLPrice,
+                                     boolean orderByNameAz, boolean orderByNamZa) {
 
-        if (name.isEmpty() && price == 0 && category.isEmpty())
-            return getActiveProducts();
+        List<Product> productList = productRepository.findByFilters(name, price, category, true);
 
+        if (orderByHPrice) {
+            productList.sort((p1, p2) -> Double.compare(p2.getPrice(), p1.getPrice()));
+        }else if (orderByLPrice) {
+            productList.sort(Comparator.comparingDouble(Product::getPrice));
+        }else if (orderByNameAz) {
+            productList.sort((p1, p2) -> CharSequence.compare(p2.getName(), p1.getName()));
+        }else if (orderByNamZa) {
+            productList.sort((p1, p2) -> CharSequence.compare(p1.getName(), p2.getName()));
+        }
 
-        return productRepository.findByFilters(name, price, category);
+        return productList;
     }
 
     @Override
