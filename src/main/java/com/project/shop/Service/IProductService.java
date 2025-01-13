@@ -12,11 +12,7 @@ public interface IProductService {
     List<Product> getActiveProducts();
     Product reactivateProduct(Long id);
     List<Product> getAllDisabledProducts();
-    List<Product> getActiveProductsByHigherPrice();
-    List<Product> getActiveProductsByLowerPrice();
-    List<Product> getActiveProductsByAlphabeticAZOrder();
-    List<Product> getActiveProductsByAlphabeticZAOrder();
-    List<Product> getByFilter(String name, float price, String category,
+    List<Product> getByFilter(String name, Float minPrice, Float maxPrice, String category,
                               boolean orderByHPrice, boolean orderByLPrice,
                               boolean orderByNameAz, boolean orderByNamZa);
 

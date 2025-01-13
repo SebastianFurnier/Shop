@@ -99,7 +99,8 @@ public class ProductController {
 
     @GetMapping("/filter")
     public ResponseEntity<Map<String, List<Product>>> getByFilter(@RequestParam(required = false) String name,
-                                                                  @RequestParam(required = false) Float price,
+                                                                  @RequestParam(required = false) Float minPrice,
+                                                                  @RequestParam(required = false) Float maxPrice,
                                                                   @RequestParam(required = false) String category,
                                                                   @RequestParam(required = false) boolean orderByHPrice,
                                                                   @RequestParam(required = false) boolean orderByLPrice,
@@ -107,40 +108,9 @@ public class ProductController {
                                                                   @RequestParam(required = false) boolean orderByNameZa){
 
         Map<String, List<Product>> response = new HashMap<>();
-        response.put("products", productService.getByFilter(name, price, category,
+
+        response.put("products", productService.getByFilter(name, minPrice, maxPrice, category,
                 orderByHPrice, orderByLPrice, orderByNameAz, orderByNameZa));
-
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/getbyhprice")
-    public ResponseEntity<Map<String, List<Product>>> getProductsByHighPrice() {
-        Map<String, List<Product>> response = new HashMap<>();
-        response.put("products", productService.getActiveProductsByHigherPrice());
-
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/getbylprice")
-    public ResponseEntity<Map<String, List<Product>>> getProductsByLowPrice() {
-        Map<String, List<Product>> response = new HashMap<>();
-        response.put("products", productService.getActiveProductsByLowerPrice());
-
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/getbyascname")
-    public ResponseEntity<Map<String, List<Product>>> getProductsByAscName() {
-        Map<String, List<Product>> response = new HashMap<>();
-        response.put("products", productService.getActiveProductsByAlphabeticAZOrder());
-
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/getbydescname")
-    public ResponseEntity<Map<String, List<Product>>> getProductsByDescName() {
-        Map<String, List<Product>> response = new HashMap<>();
-        response.put("products", productService.getActiveProductsByAlphabeticZAOrder());
 
         return ResponseEntity.ok(response);
     }

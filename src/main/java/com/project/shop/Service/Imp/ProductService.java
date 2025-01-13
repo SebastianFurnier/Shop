@@ -71,40 +71,26 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<Product> getActiveProductsByHigherPrice() {
-        return productRepository.getProductsByActiveOrderByPriceDesc(true);
-    }
-
-    @Override
-    public List<Product> getActiveProductsByLowerPrice() {
-        return productRepository.getProductsByActiveOrderByPriceAsc(true);
-    }
-
-    @Override
-    public List<Product> getActiveProductsByAlphabeticAZOrder() {
-        return productRepository.getProductsByActiveOrderByNameAsc(true);
-    }
-
-    @Override
-    public List<Product> getActiveProductsByAlphabeticZAOrder() {
-        return productRepository.getProductsByActiveOrderByNameDesc(true);
-    }
-
-    @Override
-    public List<Product> getByFilter(String name, float price, String category,
+    public List<Product> getByFilter(String name, Float minPrice,  Float maxPrice, String category,
                                      boolean orderByHPrice, boolean orderByLPrice,
                                      boolean orderByNameAz, boolean orderByNamZa) {
 
-        List<Product> productList = productRepository.findByFilters(name, price, category, true);
+        if (minPrice == null)
+            minPrice = 0f;
+
+        if (maxPrice == null)
+            maxPrice = Float.MAX_VALUE;
+
+        List<Product> productList = productRepository.findByFilters(name, minPrice, maxPrice, category, true);
 
         if (orderByHPrice) {
             productList.sort((p1, p2) -> Double.compare(p2.getPrice(), p1.getPrice()));
         }else if (orderByLPrice) {
             productList.sort(Comparator.comparingDouble(Product::getPrice));
         }else if (orderByNameAz) {
-            productList.sort((p1, p2) -> CharSequence.compare(p2.getName(), p1.getName()));
-        }else if (orderByNamZa) {
             productList.sort((p1, p2) -> CharSequence.compare(p1.getName(), p2.getName()));
+        }else if (orderByNamZa) {
+            productList.sort((p1, p2) -> CharSequence.compare(p2.getName(), p1.getName()));
         }
 
         return productList;

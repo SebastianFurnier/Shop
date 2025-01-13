@@ -13,17 +13,15 @@ import java.util.Optional;
 public interface IProductRepository extends JpaRepository<Product, Long> {
     Optional<Product> getProductByActiveAndId(boolean active, Long id);
     List<Product> getProductsByActive(boolean active);
-    List<Product> getProductsByActiveOrderByPriceAsc(boolean active);
-    List<Product> getProductsByActiveOrderByPriceDesc(boolean active);
-    List<Product> getProductsByActiveOrderByNameAsc(boolean active);
-    List<Product> getProductsByActiveOrderByNameDesc(boolean active);
     @Query("SELECT p FROM Product p WHERE " +
             "(:name IS NULL OR p.name LIKE %:name%) AND " +
-            "(:price IS NULL OR p.price >= :price) AND " +
+            "(:minPrice IS NULL OR p.price >= :minPrice) AND " +
+            "(:maxPrice IS NULL OR p.price <= :maxPrice) AND " +
             "(:category IS NULL OR :category MEMBER OF p.categories) AND" +
             "(:active IS false OR p.active = :active)")
     List<Product> findByFilters(@Param("name") String name,
-                                @Param("price") Float price,
+                                @Param("minPrice") Float minPrice,
+                                @Param("maxPrice") Float maxPrice,
                                 @Param("category") String category,
                                 @Param("active") boolean active);
 }
