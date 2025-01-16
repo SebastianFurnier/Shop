@@ -8,8 +8,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.management.relation.RoleList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -58,5 +60,10 @@ public class UserSec {
         this.accountNotExpired = true;
         this.accountNotLocked = true;
         this.credentialNotExpired = true;
+    }
+
+    public Set<Role> addRole(Role role) {
+        this.rolesList.add(role);
+        return this.rolesList;
     }
 }

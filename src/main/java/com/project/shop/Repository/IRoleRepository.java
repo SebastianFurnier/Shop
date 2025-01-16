@@ -8,4 +8,6 @@ import java.util.List;
 
 @Repository
 public interface IRoleRepository extends JpaRepository<Role, Long> {
+    Role findByName(String name);
+    boolean existsByName(String name);
 }

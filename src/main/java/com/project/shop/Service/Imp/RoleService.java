@@ -22,6 +22,11 @@ public class RoleService implements IRoleService {
     }
 
     @Override
+    public Role findByName(String name) {
+        return roleRepository.findByName(name);
+    }
+
+    @Override
     public Role findById(Long id) {
         Optional<Role> roleAux = roleRepository.findById(id);
 
@@ -32,8 +37,13 @@ public class RoleService implements IRoleService {
     }
 
     @Override
-    public Role save(Role role) {
-        return roleRepository.save(role);
+    public Role save(String role) {
+
+        Role roleAux = new Role();
+        roleAux.setName(role);
+        roleAux.setActive(true);
+
+        return roleRepository.save(roleAux);
     }
 
     @Override
@@ -53,5 +63,10 @@ public class RoleService implements IRoleService {
     @Override
     public Role update(Role role) {
         return roleRepository.save(role);
+    }
+
+    @Override
+    public boolean existByName(String name) {
+        return roleRepository.existsByName(name);
     }
 }

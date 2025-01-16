@@ -22,7 +22,7 @@ public class RoleController {
     private IRoleService roleService;
 
     @PostMapping("/create")
-    public ResponseEntity<Role> createRole(@Valid @RequestBody Role role){
+    public ResponseEntity<Role> createRole(@Valid @RequestBody String role){
         Role roleCreated = roleService.save(role);
 
         URI location = URI.create(String.format("/roles/get/%d", roleCreated.getId()));

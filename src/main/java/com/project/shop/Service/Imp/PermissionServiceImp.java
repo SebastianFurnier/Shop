@@ -59,4 +59,9 @@ public class PermissionServiceImp implements IPermissionService {
 
         return permission;
     }
+
+    @Override
+    public boolean existByName(String name) {
+        return permissionRepository.existsByPermissionName(name);
+    }
 }

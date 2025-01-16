@@ -12,4 +12,5 @@ public interface IPermissionService {
     Permission save(String name);
     Permission deleteById(Long id);
     Permission update(Permission permission);
+    boolean existByName(String name);
 }

@@ -4,8 +4,10 @@ import com.project.shop.DTO.CreationUserDTO;
 import com.project.shop.DTO.UserDTO;
 import com.project.shop.ExceptionHandler.ResourceNotFoundException;
 import com.project.shop.ExceptionHandler.UserDataNotAccepted;
+import com.project.shop.Model.Role;
 import com.project.shop.Model.UserSec;
 import com.project.shop.Repository.IUserRepository;
+import com.project.shop.Service.IRoleService;
 import com.project.shop.Service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,6 +19,9 @@ import java.util.Optional;
 public class UserService implements IUserService {
     @Autowired
     private IUserRepository userRepository;
+
+    @Autowired
+    private IRoleService roleService;
 
     @Override
     public UserDTO createUser(CreationUserDTO user) {
@@ -33,6 +38,11 @@ public class UserService implements IUserService {
 
         UserSec newUserSec = new UserSec(user);
         newUserSec.setPassword(this.encryptPassword(user.getPassword()));
+
+        Role userRole = roleService.findByName("USER");
+
+        if (userRole != null)
+            newUserSec.addRole(userRole);
 
         userRepository.save(newUserSec);
         return new UserDTO(newUserSec);
