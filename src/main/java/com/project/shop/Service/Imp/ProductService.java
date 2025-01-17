@@ -101,17 +101,6 @@ public class ProductService implements IProductService {
 
         return productRepository.findByFilters(pageable, name,
                 minPrice, maxPrice, category, true);
-
-        /*if (orderByHPrice) {
-            productList.sort((p1, p2) -> Double.compare(p2.getPrice(), p1.getPrice()));
-        }else if (orderByLPrice) {
-            productList.sort(Comparator.comparingDouble(Product::getPrice));
-        }else if (orderByNameAz) {
-            productList.sort((p1, p2) -> CharSequence.compare(p1.getName(), p2.getName()));
-        }else if (orderByNamZa) {
-            productList.sort((p1, p2) -> CharSequence.compare(p2.getName(), p1.getName()));
-        }
-        */
     }
 
     @Override
