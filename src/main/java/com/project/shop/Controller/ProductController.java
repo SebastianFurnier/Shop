@@ -99,7 +99,7 @@ public class ProductController {
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<Page<Product>> getByFilter(@RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<Map<String, List<Product>>> getByFilter(@RequestParam(defaultValue = "0") int page,
                                                                   @RequestParam(defaultValue = "10") int size,
                                                                   @RequestParam(required = false) String name,
                                                                   @RequestParam(required = false) Float minPrice,
@@ -110,8 +110,11 @@ public class ProductController {
                                                                   @RequestParam(required = false) boolean orderByNameAz,
                                                                   @RequestParam(required = false) boolean orderByNameZa){
 
-        Page<Product> response =  productService.getByFilter(page, size, name, minPrice, maxPrice, category,
+        Page<Product> pageProducts =  productService.getByFilter(page, size, name, minPrice, maxPrice, category,
                 orderByHPrice, orderByLPrice, orderByNameAz, orderByNameZa);
+
+        Map<String, List<Product>> response = new HashMap<>();
+        response.put("response", pageProducts.getContent());
 
         return ResponseEntity.ok(response);
     }

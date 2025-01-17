@@ -97,7 +97,7 @@ public class ProductService implements IProductService {
             sort = Sort.by(Sort.Direction.DESC, "name");
         }
 
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, sort);
 
         return productRepository.findByFilters(pageable, name,
                 minPrice, maxPrice, category, true);
