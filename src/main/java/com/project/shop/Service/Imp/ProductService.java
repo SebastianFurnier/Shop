@@ -5,6 +5,10 @@ import com.project.shop.Model.Product;
 import com.project.shop.Repository.IProductRepository;
 import com.project.shop.Service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -71,7 +75,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<Product> getByFilter(String name, Float minPrice,  Float maxPrice, String category,
+    public Page<Product> getByFilter(int page, int size, String name, Float minPrice, Float maxPrice, String category,
                                      boolean orderByHPrice, boolean orderByLPrice,
                                      boolean orderByNameAz, boolean orderByNamZa) {
 
@@ -81,9 +85,24 @@ public class ProductService implements IProductService {
         if (maxPrice == null)
             maxPrice = Float.MAX_VALUE;
 
-        List<Product> productList = productRepository.findByFilters(name, minPrice, maxPrice, category, true);
+        Sort sort = Sort.unsorted();
 
         if (orderByHPrice) {
+            sort = Sort.by(Sort.Direction.DESC, "price");
+        } else if (orderByLPrice) {
+            sort = Sort.by(Sort.Direction.ASC, "price");
+        } else if (orderByNameAz) {
+            sort = Sort.by(Sort.Direction.ASC, "name");
+        } else if (orderByNamZa) {
+            sort = Sort.by(Sort.Direction.DESC, "name");
+        }
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return productRepository.findByFilters(pageable, name,
+                minPrice, maxPrice, category, true);
+
+        /*if (orderByHPrice) {
             productList.sort((p1, p2) -> Double.compare(p2.getPrice(), p1.getPrice()));
         }else if (orderByLPrice) {
             productList.sort(Comparator.comparingDouble(Product::getPrice));
@@ -92,8 +111,7 @@ public class ProductService implements IProductService {
         }else if (orderByNamZa) {
             productList.sort((p1, p2) -> CharSequence.compare(p2.getName(), p1.getName()));
         }
-
-        return productList;
+        */
     }
 
     @Override

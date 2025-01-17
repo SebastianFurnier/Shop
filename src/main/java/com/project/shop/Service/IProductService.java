@@ -1,6 +1,7 @@
 package com.project.shop.Service;
 
 import com.project.shop.Model.Product;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface IProductService {
     List<Product> getActiveProducts();
     Product reactivateProduct(Long id);
     List<Product> getAllDisabledProducts();
-    List<Product> getByFilter(String name, Float minPrice, Float maxPrice, String category,
+    Page<Product> getByFilter(int page, int size, String name, Float minPrice, Float maxPrice, String category,
                               boolean orderByHPrice, boolean orderByLPrice,
                               boolean orderByNameAz, boolean orderByNamZa);
 

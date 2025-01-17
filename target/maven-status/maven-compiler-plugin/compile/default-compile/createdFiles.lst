@@ -2,6 +2,7 @@ com\project\shop\Service\Imp\SellService.class
 com\project\shop\Controller\UserController.class
 com\project\shop\Configuration\SecurityConfig.class
 com\project\shop\ExceptionHandler\GlobalExceptionHandler.class
+com\project\shop\Enum\DefaultRoles.class
 com\project\shop\DTO\AuthResponseDTO.class
 com\project\shop\ExceptionHandler\UserDataNotAccepted.class
 com\project\shop\Model\Photo.class
@@ -41,4 +42,6 @@ com\project\shop\Utils\JwtUtils.class
 com\project\shop\Configuration\WebConfig.class
 com\project\shop\Repository\ISellRepository.class
 com\project\shop\Service\Imp\UserService.class
+com\project\shop\Enum\DefaultPermissions.class
+com\project\shop\Component\DataInitializer.class
 com\project\shop\Service\Imp\ProductService.class
