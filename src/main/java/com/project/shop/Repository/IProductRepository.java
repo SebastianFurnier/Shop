@@ -1,6 +1,8 @@
 package com.project.shop.Repository;
 
 import com.project.shop.Model.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,7 +21,8 @@ public interface IProductRepository extends JpaRepository<Product, Long> {
             "(:maxPrice IS NULL OR p.price <= :maxPrice) AND " +
             "(:category IS NULL OR :category MEMBER OF p.categories) AND" +
             "(:active IS false OR p.active = :active)")
-    List<Product> findByFilters(@Param("name") String name,
+    Page<Product> findByFilters(Pageable pageable,
+                                @Param("name") String name,
                                 @Param("minPrice") Float minPrice,
                                 @Param("maxPrice") Float maxPrice,
                                 @Param("category") String category,

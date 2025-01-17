@@ -4,6 +4,7 @@ import com.project.shop.Model.Product;
 import com.project.shop.Service.IProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -98,7 +99,9 @@ public class ProductController {
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<Map<String, List<Product>>> getByFilter(@RequestParam(required = false) String name,
+    public ResponseEntity<Page<Product>> getByFilter(@RequestParam(defaultValue = "0") int page,
+                                                                  @RequestParam(defaultValue = "10") int size,
+                                                                  @RequestParam(required = false) String name,
                                                                   @RequestParam(required = false) Float minPrice,
                                                                   @RequestParam(required = false) Float maxPrice,
                                                                   @RequestParam(required = false) String category,
@@ -107,10 +110,8 @@ public class ProductController {
                                                                   @RequestParam(required = false) boolean orderByNameAz,
                                                                   @RequestParam(required = false) boolean orderByNameZa){
 
-        Map<String, List<Product>> response = new HashMap<>();
-
-        response.put("products", productService.getByFilter(name, minPrice, maxPrice, category,
-                orderByHPrice, orderByLPrice, orderByNameAz, orderByNameZa));
+        Page<Product> response =  productService.getByFilter(page, size, name, minPrice, maxPrice, category,
+                orderByHPrice, orderByLPrice, orderByNameAz, orderByNameZa);
 
         return ResponseEntity.ok(response);
     }
