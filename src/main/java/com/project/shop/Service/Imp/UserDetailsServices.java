@@ -2,8 +2,10 @@ package com.project.shop.Service.Imp;
 
 import com.project.shop.DTO.AuthLoginRequestDTO;
 import com.project.shop.DTO.AuthResponseDTO;
+import com.project.shop.DTO.UserDTO;
 import com.project.shop.Model.UserSec;
 import com.project.shop.Repository.IUserRepository;
+import com.project.shop.Service.IUserService;
 import com.project.shop.Utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -34,6 +36,9 @@ public class UserDetailsServices implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private IUserService userService;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserSec userSec = userRepository.findUserEntityByUsername(username)
@@ -60,11 +65,14 @@ public class UserDetailsServices implements UserDetailsService {
         String username = authLoginRequest.username();
         String password = authLoginRequest.password();
 
+        UserDTO user = userService.getUserByUsername(username);
+        String role = user.getRole().getName();
+
         Authentication authentication = this.authenticate(username, password);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String accessToken = jwtUtils.createToken(authentication);
-        return new AuthResponseDTO(username, "login ok", accessToken, true);
+        return new AuthResponseDTO(username, role, "login ok", accessToken, true);
     }
 
     public Authentication authenticate(String username, String password) {

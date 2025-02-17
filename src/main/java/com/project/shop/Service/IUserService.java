@@ -2,6 +2,7 @@ package com.project.shop.Service;
 
 import com.project.shop.DTO.CreationUserDTO;
 import com.project.shop.DTO.UserDTO;
+import com.project.shop.Model.Role;
 import com.project.shop.Model.UserSec;
 
 public interface IUserService {

@@ -1,5 +1,6 @@
 package com.project.shop.Controller;
 
+import com.project.shop.DTO.SellDTO;
 import com.project.shop.Model.Sell;
 import com.project.shop.Model.SellItem;
 import com.project.shop.Service.ISellService;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/sells")
@@ -19,11 +21,11 @@ public class SellController {
     private ISellService sellService;
 
     @PostMapping("/create")
-    public ResponseEntity<Sell> createSell(@RequestBody List<SellItem> itemList, @RequestBody Long userId) {
+    public ResponseEntity<SellDTO> createSell(@RequestBody Map<Long, Integer> itemList) {
 
-        Sell sell = sellService.createSell(itemList, userId);
+        SellDTO sell = sellService.createSell(itemList);
 
-        URI location = URI.create(String.format("/sells/get/%d", sell.getId()));
+        URI location = URI.create(String.format("/sells/get/%d", sell.getSellId()));
 
         return ResponseEntity.created(location).body(sell);
     }

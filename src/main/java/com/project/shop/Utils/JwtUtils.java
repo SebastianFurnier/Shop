@@ -6,6 +6,9 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.project.shop.DTO.UserDTO;
+import com.project.shop.Service.IUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,9 +27,13 @@ public class JwtUtils {
     @Value("${security.jwt.user.generator")
     private String userGenerator;
 
+    @Autowired
+    private IUserService userService;
+
     public String createToken (Authentication authentication) {
         Algorithm algorithm = Algorithm.HMAC256(this.privateKey);
         String username = authentication.getPrincipal().toString();
+
         String authorities = authentication.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
@@ -63,6 +70,8 @@ public class JwtUtils {
     public Claim getSpecificClaim (DecodedJWT decodedJWT, String claimName) {
         return decodedJWT.getClaim(claimName);
     }
+
+    public Long getUserId(DecodedJWT decodedJWT) { return decodedJWT.getClaim("id").asLong();}
 
     public Map<String, Claim> returnAllClaims (DecodedJWT decodedJWT){
         return decodedJWT.getClaims();
