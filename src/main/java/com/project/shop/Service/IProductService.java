@@ -10,9 +10,8 @@ public interface IProductService {
     Product editProduct(Product product);
     void deleteProduct(Long id);
     Product getActiveProduct(Long id);
-    List<Product> getActiveProducts();
     Product reactivateProduct(Long id);
-    List<Product> getAllDisabledProducts();
+    Page<Product> getAllDisabledProducts(int page, int size);
     Page<Product> getByFilter(int page, int size, String name, Float minPrice, Float maxPrice, String category,
                               boolean orderByHPrice, boolean orderByLPrice,
                               boolean orderByNameAz, boolean orderByNamZa);

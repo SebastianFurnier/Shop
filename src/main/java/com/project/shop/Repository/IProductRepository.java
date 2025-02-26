@@ -14,7 +14,7 @@ import java.util.Optional;
 @Repository
 public interface IProductRepository extends JpaRepository<Product, Long> {
     Optional<Product> getProductByActiveAndId(boolean active, Long id);
-    List<Product> getProductsByActive(boolean active);
+    Page<Product> getProductsByActive(Pageable pageable, boolean active);
     @Query("SELECT p FROM Product p WHERE " +
             "(:name IS NULL OR p.name LIKE %:name%) AND " +
             "(:minPrice IS NULL OR p.price >= :minPrice) AND " +

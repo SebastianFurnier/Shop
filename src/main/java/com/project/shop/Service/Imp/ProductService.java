@@ -52,11 +52,6 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<Product> getActiveProducts() {
-        return productRepository.getProductsByActive(true);
-    }
-
-    @Override
     public Product reactivateProduct(Long id) {
         Optional<Product> myProduct = productRepository.getProductByActiveAndId(false, id);
 
@@ -70,8 +65,10 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<Product> getAllDisabledProducts() {
-        return productRepository.getProductsByActive(false);
+    public Page<Product> getAllDisabledProducts(int page, int size) {
+        Sort sort = Sort.unsorted();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return productRepository.getProductsByActive(pageable, false);
     }
 
     @Override
